@@ -1,0 +1,21 @@
+Aluno: Lucas Caetano Lopes Rodrigues
+Disciplina: AEDS II
+Matrícula: 2016006670
+
+Para compilar e executar o código (utilizando gcc):
+ - Na pasta raíz (tp1):
+./compile.sh
+ - Entrar na pasta output
+./TP1.exe nomearquivo1 nomearquivo2
+
+Ou, para compilar o projeto sem o script:
+
+Na pasta src:
+ gcc -c Pile.c -o ../output/Pile.o
+ gcc -c TP1.c -o ../output/TP1.o
+
+Na pasta output:
+ gcc -o TP1.exe TP1.o
+ ./TP1.exe nomearquivo1 nomearquivo2
+
+

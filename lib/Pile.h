@@ -6,10 +6,10 @@ typedef struct {
 	int size;
 } Pile;
 
-void createEmptyPile(Pile *p);
-void isPileEmpty(const Pile *p);
-void pile(Item i, Pile *p);
-Item unpile(Pile *p);
-int size(const Pile *p);
+void createEmptyPile(Pile*);
+int isPileEmpty(const Pile*);
+void pile(Item, Pile*);
+int unpile(Pile*, Item*);
+int size(const Pile*);
 
 #endif

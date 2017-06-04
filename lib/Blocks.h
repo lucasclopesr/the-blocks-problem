@@ -5,4 +5,6 @@ typedef struct{
 	Pile *ground;
 } Blocks;
 
+void createScenario(Blocks*, int);
+
 #endif
