@@ -3,6 +3,7 @@
 
 typedef struct{
 	Pile *ground;
+	int size;
 } Blocks;
 
 void createScenario(Blocks*, int);

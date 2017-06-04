@@ -10,6 +10,6 @@ void createEmptyPile(Pile*);
 int isPileEmpty(const Pile*);
 void pile(Item, Pile*);
 int unpile(Pile*, Item*);
-int size(const Pile*);
+int sizeOfPile(const Pile*);
 
 #endif

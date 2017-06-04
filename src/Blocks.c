@@ -15,6 +15,8 @@ void createScenario(Blocks *scenario, int n){
 		pile(deafultItem, &(scenario->ground[i]));
 	}
 
+	scenario->size = n;
+	
 	//Loop to check if scenario was created correctly.
 	/*for(i = 0; i < n; i++){
 		printf("Bottom: %d\n", scenario->ground[i].bottom->content.key);

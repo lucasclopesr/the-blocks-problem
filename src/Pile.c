@@ -41,6 +41,6 @@ int unpile(Pile *p, Item *i){
 	return 0;
 }
 
-int size(const Pile *p){
+int sizeOfPile(const Pile *p){
 	return p->size;
 }
