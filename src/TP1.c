@@ -109,10 +109,10 @@ void _moveOnto(Blocks *scenario, int a, int b){
 		}
 	}
 
-	for(i = 0; i < scenario->size; i++){
+	/*for(i = 0; i < scenario->size; i++){
 		printf("Pilha %d: %d\n", i, sizeOfPile(&(scenario->ground[i])));
 	}
-	printf("\n");
+	printf("\n");*/
 }
 
 void _moveOver(Blocks *scenario, int a, int b){
@@ -162,10 +162,10 @@ void _moveOver(Blocks *scenario, int a, int b){
 		}
 	}
 
-	for(i = 0; i < scenario->size; i++){
+	/*for(i = 0; i < scenario->size; i++){
 		printf("Pilha %d: %d\n", i, sizeOfPile(&(scenario->ground[i])));
 	}
-	printf("\n");
+	printf("\n");*/
 }
 
 void _pileOnto(Blocks *scenario, int a, int b){
@@ -263,10 +263,10 @@ void _pileOnto(Blocks *scenario, int a, int b){
 		}
 	}
 
-	for(i = 0; i < scenario->size; i++){
+	/*for(i = 0; i < scenario->size; i++){
 		printf("Pilha %d: %d\n", i, sizeOfPile(&(scenario->ground[i])));
 	}
-	printf("\n");
+	printf("\n");*/
 }
 
 void _pileOver(Blocks *scenario, int a, int b){
@@ -323,10 +323,10 @@ void _pileOver(Blocks *scenario, int a, int b){
 		}
 	}
 
-	for(i = 0; i < scenario->size; i++){
+	/*for(i = 0; i < scenario->size; i++){
 		printf("Pilha %d: %d\n", i, sizeOfPile(&(scenario->ground[i])));
 	}
-	printf("\n");
+	printf("\n");*/
 }
 
 void _executeCommands(FILE *input, Blocks *scenario){
@@ -362,6 +362,39 @@ void _executeCommands(FILE *input, Blocks *scenario){
 	}
 }
 
+void _writeOutput(Blocks scenario, char *output){
+	FILE *outputFile = fopen(output, "w");
+
+	int i;
+	int j;
+	int k;
+	int sizeOfStack;
+	int sizeOfTemporaryStack;
+
+	Item temporaryUnpiledItem;
+	Pile temporaryPile;
+
+	createEmptyPile(&temporaryPile);
+
+	for(i = 0; i < scenario.size; i++){
+		fprintf(outputFile, "%d: ", i);
+		sizeOfStack = sizeOfPile(&(scenario.ground[i]));
+
+		for(j = 0; j < sizeOfStack; j++){
+			unpile(&(scenario.ground[i]), &temporaryUnpiledItem);
+			pile(temporaryUnpiledItem, &(temporaryPile));
+		}
+
+		sizeOfTemporaryStack = sizeOfPile(&(temporaryPile));
+		for(k = 0; k < sizeOfTemporaryStack; k++){
+			unpile(&(temporaryPile), &temporaryUnpiledItem);
+			fprintf(outputFile, "%d ", temporaryUnpiledItem);
+		}
+
+		fprintf(outputFile, "\n");
+	}
+}
+
 void main(int argc, char **argv){
 	Blocks scenario;
 	FILE *input;
@@ -373,6 +406,7 @@ void main(int argc, char **argv){
 
 		if(input != NULL){
 			_executeCommands(input, &scenario);
+			_writeOutput(scenario, argv[2]);
 		}
 	} else {
 		printf("Numero incorreto de parametros.\n");
