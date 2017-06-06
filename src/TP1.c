@@ -344,7 +344,7 @@ void _executeCommands(FILE *input, Blocks *scenario){
 				}
 				if(strcmp(cmd2, "over") == 0){
 					//Call moveOver
-					_moveOnto(scenario, item1, item2);
+					_moveOver(scenario, item1, item2);
 				}
 			}
 
