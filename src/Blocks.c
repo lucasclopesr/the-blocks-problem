@@ -26,11 +26,17 @@ void createScenario(Blocks *scenario, int n){
 
 int findBlock(Blocks scenario, int key){
 	int i, j;
+	Pointer temporaryItem;
 
+	
 	for(i = 0; i < scenario.size; i++){
-		for(j = 0; j < sizeOfPile(&(scenario.ground[i])); j++){
-			if(scenario.ground[i].bottom->content.key == key){
-				return i;
+		if(isPileEmpty(&(scenario.ground[i])) == 0){
+			temporaryItem = scenario.ground[i].top->next;
+			for(j = 1; j < sizeOfPile(&(scenario.ground[i])); j++){
+				if(temporaryItem->content.key == key){
+					return i;
+				}
+				temporaryItem = temporaryItem->next;
 			}
 		}
 	}
