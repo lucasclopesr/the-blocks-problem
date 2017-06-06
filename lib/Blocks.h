@@ -7,5 +7,6 @@ typedef struct{
 } Blocks;
 
 void createScenario(Blocks*, int);
+int findBlock(Blocks, int);
 
 #endif

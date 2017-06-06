@@ -23,3 +23,17 @@ void createScenario(Blocks *scenario, int n){
 		printf("Top: %d\n\n", scenario->ground[i].top->content.key);
 	}*/
 }
+
+int findBlock(Blocks scenario, int key){
+	int i, j;
+
+	for(i = 0; i < scenario.size; i++){
+		for(j = 0; j < sizeOfPile(&(scenario.ground[i])); j++){
+			if(scenario.ground[i].bottom->content.key == key){
+				return i;
+			}
+		}
+	}
+
+	return -1;
+}

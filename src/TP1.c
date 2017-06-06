@@ -31,6 +31,9 @@ void _moveOnto(Blocks *scenario, int a, int b){
 	int k; //Aux iterator to unpile and pile itens around.
 	int unpiledIndex;
 
+	int sizeOfAStack;
+	int sizeOfBStack;
+
 	Item temporaryUnpiledItem;
 
 	for(i = 0; i < scenario->size; i++){
@@ -46,7 +49,8 @@ void _moveOnto(Blocks *scenario, int a, int b){
 						} else {
 							//Some blocks above b
 							//Unpile blocks above b, returning them to original location
-							for(k = 1; k < sizeOfPile(&(scenario->ground[j])); k++){
+							sizeOfBStack = sizeOfPile(&(scenario->ground[j]));
+							for(k = 1; k < sizeOfBStack; k++){
 								unpile(&(scenario->ground[j]), &temporaryUnpiledItem);
 								unpiledIndex = temporaryUnpiledItem.key;
 								pile(temporaryUnpiledItem, &(scenario->ground[unpiledIndex]));
@@ -65,7 +69,8 @@ void _moveOnto(Blocks *scenario, int a, int b){
 						if(sizeOfPile(&(scenario->ground[j])) == 1){
 							//No blocks above b
 							//Unpile blocks above a, returning them to original location
-							for(k = 1; k < sizeOfPile(&(scenario->ground[i])); k++){
+							sizeOfAStack = sizeOfPile(&(scenario->ground[i]));
+							for(k = 1; k < sizeOfAStack; k++){
 								unpile(&(scenario->ground[i]), &temporaryUnpiledItem);
 								unpiledIndex = temporaryUnpiledItem.key;
 								pile(temporaryUnpiledItem, &(scenario->ground[unpiledIndex]));
@@ -77,14 +82,16 @@ void _moveOnto(Blocks *scenario, int a, int b){
 						} else {
 							//Some blocks above b
 							//Unpile blocks above b, returning them to original location
-							for(k = 1; k < sizeOfPile(&(scenario->ground[j])); k++){
+							sizeOfBStack = sizeOfPile(&(scenario->ground[j]));
+							for(k = 1; k < sizeOfBStack; k++){
 								unpile(&(scenario->ground[j]), &temporaryUnpiledItem);
 								unpiledIndex = temporaryUnpiledItem.key;
 								pile(temporaryUnpiledItem, &(scenario->ground[unpiledIndex]));
 							}
 
 							//Unpile blocks above a, returning them to original location
-							for(k = 1; k < sizeOfPile(&(scenario->ground[i])); k++){
+							sizeOfAStack = sizeOfPile(&(scenario->ground[i]));
+							for(k = 1; k < sizeOfAStack; k++){
 								unpile(&(scenario->ground[i]), &temporaryUnpiledItem);
 								unpiledIndex = temporaryUnpiledItem.key;
 								pile(temporaryUnpiledItem, &(scenario->ground[unpiledIndex]));
@@ -102,10 +109,10 @@ void _moveOnto(Blocks *scenario, int a, int b){
 		}
 	}
 
-	/*for(i = 0; i < scenario->size; i++){
+	for(i = 0; i < scenario->size; i++){
 		printf("Pilha %d: %d\n", i, sizeOfPile(&(scenario->ground[i])));
 	}
-	printf("\n");*/
+	printf("\n");
 }
 
 void _moveOver(Blocks *scenario, int a, int b){
@@ -113,7 +120,11 @@ void _moveOver(Blocks *scenario, int a, int b){
 	int i; //Finds pile corresponding to a's index.
 	int j; //Finds pile corresponding to b's index.
 	int k; //Aux iterator to unpile and pile itens around.
+	int pileOfB;
 	int unpiledIndex;
+
+	int sizeOfAStack;
+	int sizeOfBStack;
 
 	Item temporaryUnpiledItem;
 
@@ -121,35 +132,40 @@ void _moveOver(Blocks *scenario, int a, int b){
 		if(scenario->ground[i].bottom->content.key == a){
 			if(sizeOfPile(&(scenario->ground[i])) == 1){
 				//No blocks above a
-				for(j = 0; j < scenario->size; j++){
-					if(scenario->ground[j].bottom->content.key == b){
-						//Move a over b
-						pile(scenario->ground[i].bottom->content, &(scenario->ground[j]));
-						unpile(&(scenario->ground[i]), &temporaryUnpiledItem);
-					}
+				pileOfB = findBlock(*scenario, b);
+
+				if(pileOfB != -1){
+					//Move a over b
+					pile(scenario->ground[i].bottom->content, &(scenario->ground[pileOfB]));
+					unpile(&(scenario->ground[i]), &temporaryUnpiledItem);
 				}
 			} else {
 				//Some blocks above a
 				//Unpile blocks above a, returning them to original location
-				for(k = 1; k < sizeOfPile(&(scenario->ground[i])); k++){
+				sizeOfAStack = sizeOfPile(&(scenario->ground[i]));
+				for(k = 1; k < sizeOfAStack; k++){
 					unpile(&(scenario->ground[i]), &temporaryUnpiledItem);
 					unpiledIndex = temporaryUnpiledItem.key;
 					pile(temporaryUnpiledItem, &(scenario->ground[unpiledIndex]));
 				}
 
-				//Move a over b
-				pile(scenario->ground[i].bottom->content, &(scenario->ground[j]));
-				unpile(&(scenario->ground[i]), &temporaryUnpiledItem);
+				pileOfB = findBlock(*scenario, b);
+
+				if(pileOfB != -1){
+					//Move a over b
+					pile(scenario->ground[i].bottom->content, &(scenario->ground[pileOfB]));
+					unpile(&(scenario->ground[i]), &temporaryUnpiledItem);
+				}
 			}
 		} else {
 			//Element is not on the "ground". Figure out if I have to treat this.
 		}
 	}
 
-	/*for(i = 0; i < scenario->size; i++){
+	for(i = 0; i < scenario->size; i++){
 		printf("Pilha %d: %d\n", i, sizeOfPile(&(scenario->ground[i])));
 	}
-	printf("\n");*/
+	printf("\n");
 }
 
 void _pileOnto(Blocks *scenario, int a, int b){
@@ -158,6 +174,10 @@ void _pileOnto(Blocks *scenario, int a, int b){
 	int j; //Finds pile corresponding to b's index.
 	int k; //Aux iterator to unpile and pile itens around.
 	int unpiledIndex;
+
+	int sizeOfAStack;
+	int sizeOfBStack;
+	int sizeOfTemporaryStack;
 
 	Item temporaryUnpiledItem;
 	Pile temporaryPile;
@@ -197,35 +217,40 @@ void _pileOnto(Blocks *scenario, int a, int b){
 						if(sizeOfPile(&(scenario->ground[j])) == 1){
 							//No blocks above b
 							//Unpile blocks above a
-							for(k = 0; k < sizeOfPile(&(scenario->ground[i])); k++){
+							sizeOfAStack = sizeOfPile(&(scenario->ground[i]));
+							for(k = 0; k < sizeOfAStack; k++){
 								unpile(&(scenario->ground[i]), &temporaryUnpiledItem);
 								unpiledIndex = temporaryUnpiledItem.key;
 								pile(temporaryUnpiledItem, &(temporaryPile));
 							}
 
 							//Pile blocks above a in right order onto b
-							for(k = 0; k < sizeOfPile(&temporaryPile); k++){
+							sizeOfTemporaryStack = sizeOfPile(&temporaryPile);
+							for(k = 0; k < sizeOfTemporaryStack; k++){
 								unpile(&temporaryPile, &temporaryUnpiledItem);
 								pile(temporaryUnpiledItem, &(scenario->ground[j]));
 							}
 						} else {
 							//Some blocks above b
 							//Unpile blocks above b, returning them to original location
-							for(k = 1; k < sizeOfPile(&(scenario->ground[j])); k++){
+							sizeOfBStack = sizeOfPile(&(scenario->ground[j]));
+							for(k = 1; k < sizeOfBStack; k++){
 								unpile(&(scenario->ground[j]), &temporaryUnpiledItem);
 								unpiledIndex = temporaryUnpiledItem.key;
 								pile(temporaryUnpiledItem, &(scenario->ground[unpiledIndex]));
 							}
 
 							//Unpile blocks above a
-							for(k = 0; k < sizeOfPile(&(scenario->ground[i])); k++){
+							sizeOfAStack = sizeOfPile(&(scenario->ground[i]));
+							for(k = 0; k < sizeOfAStack; k++){
 								unpile(&(scenario->ground[i]), &temporaryUnpiledItem);
 								unpiledIndex = temporaryUnpiledItem.key;
 								pile(temporaryUnpiledItem, &(temporaryPile));
 							}
 
 							//Pile blocks above a in right order onto b
-							for(k = 0; k < sizeOfPile(&temporaryPile); k++){
+							sizeOfTemporaryStack = sizeOfPile(&temporaryPile);
+							for(k = 0; k < sizeOfTemporaryStack; k++){
 								unpile(&temporaryPile, &temporaryUnpiledItem);
 								pile(temporaryUnpiledItem, &(scenario->ground[j]));
 							}
@@ -238,20 +263,70 @@ void _pileOnto(Blocks *scenario, int a, int b){
 		}
 	}
 
-	/*for(i = 0; i < scenario->size; i++){
+	for(i = 0; i < scenario->size; i++){
 		printf("Pilha %d: %d\n", i, sizeOfPile(&(scenario->ground[i])));
 	}
 	printf("\n");
+}
 
-	Item test;
+void _pileOver(Blocks *scenario, int a, int b){
+	//Iterators
+	int i; //Finds pile corresponding to a's index.
+	int j; //Finds pile corresponding to b's index.
+	int k; //Aux iterator to unpile and pile itens around.
+	int unpiledIndex;
+	int pileOfB;
+
+	int sizeOfAStack;
+	int sizeOfBStack;
+	int sizeOfTemporaryStack;
+
+	Item temporaryUnpiledItem;
+	Pile temporaryPile;
+
+	createEmptyPile(&temporaryPile);
+
 	for(i = 0; i < scenario->size; i++){
-		printf("Pilha %d:\n", i);
-		for(j = 0; j <= sizeOfPile(&(scenario->ground[i])); j++){
-			unpile(&(scenario->ground[i]), &test);
-			printf("Item: %d\n", test.key);
+		if(scenario->ground[i].bottom->content.key == a){
+			if(sizeOfPile(&(scenario->ground[i])) == 1){
+				//No blocks above a
+				pileOfB = findBlock(*scenario, b);
+
+				if(pileOfB != -1){
+					//Pile a over b
+					pile(scenario->ground[i].bottom->content, &(scenario->ground[pileOfB]));
+					unpile(&(scenario->ground[i]), &temporaryUnpiledItem);
+				}
+			} else {
+				//Some blocks above a
+				//Unpile blocks above a
+				sizeOfAStack = sizeOfPile(&(scenario->ground[i]));
+				for(k = 0; k < sizeOfAStack; k++){
+					unpile(&(scenario->ground[i]), &temporaryUnpiledItem);
+					unpiledIndex = temporaryUnpiledItem.key;
+					pile(temporaryUnpiledItem, &(temporaryPile));
+				}
+
+				pileOfB = findBlock(*scenario, b);
+
+				if(pileOfB != -1){
+					//Pile blocks above a in right order onto b
+					sizeOfTemporaryStack = sizeOfPile(&temporaryPile);
+					for(k = 0; k < sizeOfTemporaryStack; k++){
+						unpile(&temporaryPile, &temporaryUnpiledItem);
+						pile(temporaryUnpiledItem, &(scenario->ground[pileOfB]));
+					}
+				}
+			}
+		} else {
+			//Element is not on the "ground". Figure out if I have to treat this.
 		}
-		printf("\n");
-	}*/
+	}
+
+	for(i = 0; i < scenario->size; i++){
+		printf("Pilha %d: %d\n", i, sizeOfPile(&(scenario->ground[i])));
+	}
+	printf("\n");
 }
 
 void _executeCommands(FILE *input, Blocks *scenario){
@@ -280,6 +355,7 @@ void _executeCommands(FILE *input, Blocks *scenario){
 				}
 				if(strcmp(cmd2, "over") == 0){
 					//Call pileOver
+					_pileOver(scenario, item1, item2);
 				}
 			}
 		}
